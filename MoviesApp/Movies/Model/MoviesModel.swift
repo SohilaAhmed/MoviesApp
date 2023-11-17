@@ -32,15 +32,7 @@ struct MovieResult: Codable {
     var rating: String?
     var type: String?
     var thumbnail: Thumbnail?
-}
-
-
-enum Rating: String, Codable {
-    case empty = ""
-    case marvelPsr = "Marvel Psr"
-    case ratedT = "Rated T"
-    case ratingRatedT = "Rated T+"
-}
+} 
 
 // MARK: - Thumbnail
 struct Thumbnail: Codable {

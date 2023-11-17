@@ -24,10 +24,10 @@ class MoviesViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         allMoviesViewModelProtocol.bindallMovies = { [weak self] in
 
             print(self?.allMoviesViewModelProtocol.allMovies?.data?.results?[1].title ?? "")
-//            self?.allCoupon = self?.presentAllCouponViewModel.allCouponPriceRule.price_rules ?? []
             DispatchQueue.main.async { [weak self] in
                 self?.moviesTableView.reloadData()
             }
@@ -39,15 +39,14 @@ class MoviesViewController: UIViewController {
     
     @IBAction func searchTFAction(_ sender: UITextField) {
         if let searchText = sender.text {
-            if(!searchText.isEmpty && !searchText.trimmingCharacters(in: .whitespaces).isEmpty) {
-//                serchedProducts = arrOfProducts?.filter{$0.product_name?.lowercased().contains(searchText.lowercased()) ?? false}
-            }else{
-//                serchedProducts = arrOfProducts
+            allMoviesViewModelProtocol.bindSearchedMovies = { [weak self] in
+                DispatchQueue.main.async { [weak self] in
+                    self?.moviesTableView.reloadData()
+                }
             }
-            moviesTableView.reloadData()
+            allMoviesViewModelProtocol.searchMovie(searchText: searchText)
         }
     }
-    
 
 }
 
