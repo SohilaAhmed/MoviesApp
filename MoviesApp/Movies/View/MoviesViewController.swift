@@ -13,6 +13,8 @@ class MoviesViewController: UIViewController {
     @IBOutlet weak var searchTF: UITextField!
     @IBOutlet weak var moviesTableView: UITableView!
       
+    var allMoviesViewModelProtocol: AllMoviesViewModelProtocol = AllMoviesViewModel()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -20,7 +22,31 @@ class MoviesViewController: UIViewController {
         desginTFView(view: searchView)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        allMoviesViewModelProtocol.bindallMovies = { [weak self] in
 
+            print(self?.allMoviesViewModelProtocol.allMovies?.data?.results?[1].title ?? "")
+//            self?.allCoupon = self?.presentAllCouponViewModel.allCouponPriceRule.price_rules ?? []
+            DispatchQueue.main.async { [weak self] in
+                self?.moviesTableView.reloadData()
+            }
+            
+        }
+        
+        allMoviesViewModelProtocol.getAllMovies(pageNum: "0")
+    }
+    
+    @IBAction func searchTFAction(_ sender: UITextField) {
+        if let searchText = sender.text {
+            if(!searchText.isEmpty && !searchText.trimmingCharacters(in: .whitespaces).isEmpty) {
+//                serchedProducts = arrOfProducts?.filter{$0.product_name?.lowercased().contains(searchText.lowercased()) ?? false}
+            }else{
+//                serchedProducts = arrOfProducts
+            }
+            moviesTableView.reloadData()
+        }
+    }
     
 
 }

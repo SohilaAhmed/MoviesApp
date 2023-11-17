@@ -10,6 +10,13 @@ import UIKit
 class MovieTableViewCell: UITableViewCell {
 
     @IBOutlet weak var cellView: UIView!
+    @IBOutlet weak var movieImg: UIImageView!
+    @IBOutlet weak var movieYear: UILabel!
+    @IBOutlet weak var movieRate: UILabel! 
+    @IBOutlet weak var moviewName: UILabel!
+    @IBOutlet weak var movieType: UILabel!
+    @IBOutlet weak var moviewChar: UILabel!
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -20,6 +27,22 @@ class MovieTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+    }
+    
+    func setupCell(moviewName: String, movieImg: String, movieYear: String, movieRate: String){
+        self.moviewName.text = moviewName
+        self.movieImg.image = UIImage(named: "appstore")
+        self.movieYear.text = movieYear
+        if movieRate == ""{
+            self.movieRate.text = "Good"
+        }else{
+            self.movieRate.text = movieRate
+        }
+    }
+    
+    func setUpMovieDetails(movieType: String, moviewChar: String){
+        self.movieType.text = movieType
+        self.moviewChar.text = moviewChar
     }
 
     func desginView(view: UIView){

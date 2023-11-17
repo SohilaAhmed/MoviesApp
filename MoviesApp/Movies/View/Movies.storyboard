@@ -163,6 +163,12 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="cellView" destination="dod-3n-5eY" id="PC7-5U-rYp"/>
+                                            <outlet property="movieImg" destination="Kzt-9I-Bx6" id="z5R-q2-Ff1"/>
+                                            <outlet property="movieRate" destination="tyI-at-jZ8" id="iXy-Bf-H8Q"/>
+                                            <outlet property="movieType" destination="ej0-pG-lDH" id="Cbq-mw-aik"/>
+                                            <outlet property="movieYear" destination="iDD-xg-RGf" id="ko4-cZ-K75"/>
+                                            <outlet property="moviewChar" destination="S6j-v3-kse" id="2rb-1I-5DL"/>
+                                            <outlet property="moviewName" destination="Z7X-xQ-3ie" id="OSP-57-8qw"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -178,6 +184,9 @@
                                         <rect key="frame" x="5" y="5" width="343" height="30"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
+                                        <connections>
+                                            <action selector="searchTFAction:" destination="Y6W-OH-hqX" eventType="editingChanged" id="thz-Hh-BQs"/>
+                                        </connections>
                                     </textField>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
