@@ -7,15 +7,9 @@
 
 import Foundation
 import CoreData
-import UIKit
+import UIKit 
 
-
-protocol CoreDataManagerProtocol: AnyObject{
-    static func saveToCoreData(movieChara: String, movieId: Int, movieType: String)
-    static func fetchFromCoreData() ->[MovieDescModel]
-}
-
-class CoreDataManager: CoreDataManagerProtocol {
+class CoreDataManager {
     static var context : NSManagedObjectContext?
     static var appDelegate : AppDelegate?
     

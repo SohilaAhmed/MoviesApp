@@ -74,7 +74,6 @@
 				7EECCEF30596536DA883905A /* Pods-MoviesApp.debug.xcconfig */,
 				71651618C7E44B4665842F85 /* Pods-MoviesApp.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -102,7 +101,7 @@
 				C317D6E02B055B7B00F264AF /* AppDelegate.swift */,
 				C317D6E22B055B7B00F264AF /* SceneDelegate.swift */,
 				C317D7012B0572BB00F264AF /* Helpers */,
-				C317D6F72B056DDD00F264AF /* Movies */,
+				C3BC61A82B08F9D30021EFD9 /* Modules */,
 				C317D6EC2B055B7D00F264AF /* Assets.xcassets */,
 				C317D6EE2B055B7D00F264AF /* LaunchScreen.storyboard */,
 				C317D6F12B055B7D00F264AF /* Info.plist */,
@@ -180,6 +179,14 @@
 				C319D5E32B07F2A3002F6D82 /* CoreDataService.swift */,
 			);
 			path = CoreData;
+			sourceTree = "<group>";
+		};
+		C3BC61A82B08F9D30021EFD9 /* Modules */ = {
+			isa = PBXGroup;
+			children = (
+				C317D6F72B056DDD00F264AF /* Movies */,
+			);
+			path = Modules;
 			sourceTree = "<group>";
 		};
 		C3E71E032B0793C900C3E1C1 /* NetworkService */ = {
