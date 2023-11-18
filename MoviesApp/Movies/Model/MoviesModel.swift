@@ -32,6 +32,8 @@ struct MovieResult: Codable {
     var rating: String?
     var type: String?
     var thumbnail: Thumbnail?
+    var characters: Characters?
+    var selected: Bool? = false
 } 
 
 // MARK: - Thumbnail
@@ -56,4 +58,25 @@ struct URLElement: Codable {
 
 enum URLType: String, Codable {
     case detail = "detail"
+}
+
+// MARK: - Characters
+struct Characters: Codable {
+    var available: Int?
+    var collectionURI: String?
+    var items: [Next]?
+    var returned: Int?
+}
+
+// MARK: - Next
+struct Next: Codable {
+//    var resourceURI: String?
+    var name: String?
+}
+
+
+struct MovieDescModel: Codable{
+    var movieChara: String?
+    var movieId: Int?
+    var movieType: String?
 }

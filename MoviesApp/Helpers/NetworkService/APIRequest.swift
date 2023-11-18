@@ -6,26 +6,36 @@
 //
 
 import Foundation
+import NVActivityIndicatorView
 
 private let BASE_URL = "http://gateway.marvel.com/v1/public/"
 
 protocol Service{
-    static func getApi<T: Decodable>(endPoint: EndPoints, completionHandeler: @escaping ((T?), Error?) -> Void)
+    static func getApi<T: Decodable>(vc: UIViewController, endPoint: EndPoints, completionHandeler: @escaping ((T?), Error?) -> Void)
 }
 
 class NetworkService : Service{
-     
-    static func getApi<T: Decodable>(endPoint: EndPoints, completionHandeler: @escaping ((T?), Error?) -> Void){
+    
+    static func getApi<T: Decodable>(vc: UIViewController, endPoint: EndPoints, completionHandeler: @escaping ((T?), Error?) -> Void){
         
+        let frame = CGRect(x: vc.view.frame.width / 2 , y: vc.view.frame.height / 2, width: 0, height: 0)
+        let activityIndicatorView = NVActivityIndicatorView(frame: frame,
+                                                            type: .ballScale)
+        activityIndicatorView.color = UIColor.darkGray
+        activityIndicatorView.padding = 100
+        vc.view.addSubview(activityIndicatorView)
+        activityIndicatorView.startAnimating()
+         
         let path = "\(BASE_URL)\(endPoint.path)"
         let url = URL(string: path)
         guard let url = url else{ return }
         var req = URLRequest(url: url)
-        req.httpMethod = "GET"
-//        req.addValue("c9a894ed4026010d919952290204ee1c", forHTTPHeaderField: "apikey")
-//        req.addValue("49358250921c96aa2c6099d7d95e1bcc", forHTTPHeaderField: "hash")
+        req.httpMethod = "GET" 
         let session = URLSession(configuration: URLSessionConfiguration.default)
         let task = session.dataTask(with: req) { data, response, error in
+            DispatchQueue.main.async {  
+                activityIndicatorView.stopAnimating()
+            }
             if let error = error{
                 print(error.localizedDescription)
                 completionHandeler(nil, error)

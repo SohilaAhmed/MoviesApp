@@ -8,12 +8,12 @@
 import UIKit
 
 class MoviesViewController: UIViewController {
-
+    
     @IBOutlet weak var searchView: UIView!
     @IBOutlet weak var searchTF: UITextField!
     @IBOutlet weak var moviesTableView: UITableView!
-      
-    var allMoviesViewModelProtocol: AllMoviesViewModelProtocol = AllMoviesViewModel()
+    
+    var moviesViewModelProtocol: MoviesViewModelProtocol = MoviesViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,29 +25,25 @@ class MoviesViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        allMoviesViewModelProtocol.bindallMovies = { [weak self] in
-
-            print(self?.allMoviesViewModelProtocol.allMovies?.data?.results?[1].title ?? "")
+        moviesViewModelProtocol.bindallMovies = { [weak self] in
             DispatchQueue.main.async { [weak self] in
                 self?.moviesTableView.reloadData()
             }
-            
         }
-        
-        allMoviesViewModelProtocol.getAllMovies(pageNum: "0")
+        moviesViewModelProtocol.getAllMovies(vc: self, pageNum: "0") 
     }
     
     @IBAction func searchTFAction(_ sender: UITextField) {
         if let searchText = sender.text {
-            allMoviesViewModelProtocol.bindSearchedMovies = { [weak self] in
+            moviesViewModelProtocol.bindSearchedMovies = { [weak self] in
                 DispatchQueue.main.async { [weak self] in
                     self?.moviesTableView.reloadData()
                 }
             }
-            allMoviesViewModelProtocol.searchMovie(searchText: searchText)
+            moviesViewModelProtocol.searchMovie(searchText: searchText)
         }
     }
-
+    
 }
 
 extension MoviesViewController{
@@ -64,7 +60,7 @@ extension MoviesViewController{
     
     func desginTFView(view: UIView){
         view.layer.borderColor = UIColor(hexString: "#EFEFEF")?.cgColor
-        view.layer.borderWidth = 1 
+        view.layer.borderWidth = 1
         view.layer.masksToBounds = true
     }
 }

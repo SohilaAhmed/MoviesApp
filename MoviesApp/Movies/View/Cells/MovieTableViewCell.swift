@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class MovieTableViewCell: UITableViewCell {
 
@@ -16,6 +17,8 @@ class MovieTableViewCell: UITableViewCell {
     @IBOutlet weak var moviewName: UILabel!
     @IBOutlet weak var movieType: UILabel!
     @IBOutlet weak var moviewChar: UILabel!
+    @IBOutlet weak var descView: UIView!
+    @IBOutlet weak var mainView: UIView!
     
     
     override func awakeFromNib() {
@@ -24,25 +27,20 @@ class MovieTableViewCell: UITableViewCell {
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+        super.setSelected(selected, animated: animated) 
     }
     
     func setupCell(moviewName: String, movieImg: String, movieYear: String, movieRate: String){
         self.moviewName.text = moviewName
-        self.movieImg.image = UIImage(named: "appstore")
+        self.movieImg.kf.setImage(with: URL(string:(movieImg).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""), placeholder: UIImage(named: "appstore"))
         self.movieYear.text = movieYear
-        if movieRate == ""{
-            self.movieRate.text = "Good"
-        }else{
-            self.movieRate.text = movieRate
-        }
+        self.movieRate.text = movieRate.isEmpty ? "Good" : movieRate
     }
     
     func setUpMovieDetails(movieType: String, moviewChar: String){
-        self.movieType.text = movieType
+        self.movieType.text = movieType.isEmpty ? "Movie" : movieType
         self.moviewChar.text = moviewChar
+        
     }
 
     func desginView(view: UIView){
@@ -54,5 +52,6 @@ class MovieTableViewCell: UITableViewCell {
         view.layer.shadowOffset = CGSize(width: 0, height: 3)
         view.layer.shadowRadius = 6
         view.layer.shadowOpacity = 0.5
+        self.movieImg.layer.cornerRadius = 8
     }
 }
