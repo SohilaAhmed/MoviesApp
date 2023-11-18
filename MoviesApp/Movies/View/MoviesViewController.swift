@@ -20,26 +20,23 @@ class MoviesViewController: UIViewController {
         
         searchDesign(textField: searchTF)
         desginTFView(view: searchView)
+        
+        moviesViewModelProtocol.pageNum = 0
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        moviesViewModelProtocol.bindallMovies = { [weak self] in
+        moviesViewModelProtocol.bindSearchedMovies = { [weak self] in
             DispatchQueue.main.async { [weak self] in
                 self?.moviesTableView.reloadData()
             }
         }
-        moviesViewModelProtocol.getAllMovies(vc: self, pageNum: "0") 
+        moviesViewModelProtocol.getAllMovies(vc: self, pageNum: "\(moviesViewModelProtocol.pageNum)")
     }
     
     @IBAction func searchTFAction(_ sender: UITextField) {
         if let searchText = sender.text {
-            moviesViewModelProtocol.bindSearchedMovies = { [weak self] in
-                DispatchQueue.main.async { [weak self] in
-                    self?.moviesTableView.reloadData()
-                }
-            }
             moviesViewModelProtocol.searchMovie(searchText: searchText)
         }
     }

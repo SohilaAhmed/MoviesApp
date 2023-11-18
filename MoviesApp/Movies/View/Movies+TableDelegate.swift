@@ -74,18 +74,9 @@ extension MoviesViewController: UITableViewDelegate, UITableViewDataSource{
         
     }
     
-    //    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-    //        guard allMoviesViewModelProtocol.allMovies?.data?.results != nil else {
-    //            // Data is empty or nil
-    //            return
-    //        }
-    ////        if indexPath.row == (moviesData?.count ?? 0) - 1 {
-    ////            if Int(allMoviesViewModelProtocol.allMovies?.data?.offset ?? 0) ?? 00 < moviesData?. ?? 0 {
-    ////                pageNo += 1
-    ////                print("xxxxxxxxxxxxxxxxxxx\(pageNo)")
-    ////                getOrder()
-    ////              }
-    ////
-    ////        }
-    //    }
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if searchTF.text?.isEmpty ?? false{
+            moviesViewModelProtocol.setupPagination(vc: self, index: indexPath.row)
+        }
+    }
 }

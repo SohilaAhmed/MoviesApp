@@ -10,9 +10,7 @@ import UIKit
 
 
 protocol MoviesViewModelProtocol: AnyObject{
-    var bindallMovies: (() -> ())? { get set }
     var bindSearchedMovies: (() -> ())? { get set }
-//    var allMovies: MoviesModel? { get }
     var searchedMovies: [MovieResult]? { get set}
     func getAllMovies(vc: UIViewController, pageNum: String)
     func searchMovie(searchText: String)
@@ -21,18 +19,14 @@ protocol MoviesViewModelProtocol: AnyObject{
     func getMovieById(vc: UIViewController, movieId: String)
     func saveMovieDescInCoreData(movieChara: String, movieId: Int, movieType: String)
     func getMovieDescInCoreData(movieId: Int)
-    var bindsavedMovieDesc: (()->())? { get set }
     var savedMovieDesc: MovieDescModel? { get set}
+    var pageNum: Int { get set}
+    func setupPagination(vc: UIViewController, index: Int)
 }
 
 class MoviesViewModel: MoviesViewModelProtocol{
-    
-    var bindallMovies: (() -> ())?
-    var allMovies: MoviesModel?{
-        didSet{
-            bindallMovies?()
-        }
-    }
+     
+    var allMovies: [MovieResult]?
     var bindSearchedMovies: (()->())?
     var searchedMovies: [MovieResult]?{
         didSet{
@@ -45,22 +39,22 @@ class MoviesViewModel: MoviesViewModelProtocol{
             bindMovieById?()
         }
     }
-    var bindsavedMovieDesc: (()->())?
-    var savedMovieDesc: MovieDescModel?{
-        didSet{
-//            bindsavedMovieDesc?()
-        }
-    }
+    var savedMovieDesc: MovieDescModel?
     var coreDataSavedMoviesDesc: [MovieDescModel]?
-//    var pageNum: Int = 0
-    
-    
+    var pageNum: Int = 0
+    var totalMovies = 0
+     
     func getAllMovies(vc: UIViewController, pageNum: String){
         NetworkService.getApi(vc: vc, endPoint: EndPoints.allMovies(pageNum: pageNum)) { [weak self] (data: MoviesModel?, error) in
             guard let responsData = data else{ return }
-            self?.allMovies = responsData
-            self?.searchedMovies = self?.allMovies?.data?.results
-//            print(self?.allMovies?.data?.results?.count ?? 0)
+            if pageNum == "0" {
+                self?.allMovies = responsData.data?.results
+            }
+            else {
+                self?.allMovies! += responsData.data?.results ?? []
+            }
+            self?.totalMovies = responsData.data?.total ?? 0
+            self?.searchedMovies = self?.allMovies
         }
     }
     
@@ -68,7 +62,7 @@ class MoviesViewModel: MoviesViewModelProtocol{
         if(!searchText.isEmpty && !searchText.trimmingCharacters(in: .whitespaces).isEmpty) {
             searchedMovies = searchedMovies?.filter{$0.title?.lowercased().contains(searchText.lowercased()) ?? false}
         }else{
-            searchedMovies = allMovies?.data?.results
+            searchedMovies = allMovies
         }
     }
     
@@ -76,7 +70,6 @@ class MoviesViewModel: MoviesViewModelProtocol{
         NetworkService.getApi(vc: vc, endPoint: EndPoints.movieByID(movieID: movieId)) { [weak self] (data: MoviesModel?, error) in
             guard let responsData = data else{ return }
             self?.movieById = responsData.data?.results?.first
-            print(self?.movieById?.title ?? 0)
         }
     }
     
@@ -93,6 +86,19 @@ class MoviesViewModel: MoviesViewModelProtocol{
                     savedMovieDesc = coreDataSavedMoviesDesc?[i] ?? MovieDescModel()
                 }
             }
+        }
+    }
+    
+    func setupPagination(vc: UIViewController, index: Int){
+        guard searchedMovies != nil else {
+            return
+        }
+        if index == (searchedMovies?.count ?? 0) - 1 {
+            if searchedMovies?.count ?? 0 < totalMovies {
+                pageNum += 1
+                getAllMovies(vc: vc, pageNum: "\(pageNum)")
+            }
+            
         }
     }
 }

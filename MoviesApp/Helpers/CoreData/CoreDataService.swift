@@ -61,7 +61,7 @@ class CoreDataManager: CoreDataManagerProtocol {
         }catch let error{
             print(error.localizedDescription)
         }
-        print(arrayOfMoviesDesc)
+//        print(arrayOfMoviesDesc)
         return arrayOfMoviesDesc
     }
     

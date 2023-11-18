@@ -45,7 +45,7 @@ class NetworkService : Service{
                     return
                   }
                 let res = try? JSONDecoder().decode(T.self, from: data)
-                print(String(data: data, encoding: .utf8)!)
+//                print(String(data: data, encoding: .utf8)!)
                 completionHandeler(res, nil)
             }
             
