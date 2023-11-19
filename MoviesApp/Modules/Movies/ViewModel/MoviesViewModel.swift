@@ -26,6 +26,7 @@ protocol MoviesViewModelProtocol: AnyObject{
 
 class MoviesViewModel: MoviesViewModelProtocol{
      
+    var movieUseCaseProtocol: MovieUseCaseProtocol = MovieUseCase()
     var allMovies: [MovieResult]?
     var bindSearchedMovies: (()->())?
     var searchedMovies: [MovieResult]?{
@@ -45,12 +46,11 @@ class MoviesViewModel: MoviesViewModelProtocol{
     var totalMovies = 0
      
     func getAllMovies(vc: UIViewController, pageNum: String){
-        NetworkService.getApi(vc: vc, endPoint: EndPoints.allMovies(pageNum: pageNum)) { [weak self] (data: MoviesModel?, error) in
+        movieUseCaseProtocol.getMovies(vc: vc, pageNum: pageNum) { [weak self] data, error in
             guard let responsData = data else{ return }
             if pageNum == "0" {
                 self?.allMovies = responsData.data?.results
-            }
-            else {
+            }else {
                 self?.allMovies! += responsData.data?.results ?? []
             }
             self?.totalMovies = responsData.data?.total ?? 0
@@ -67,18 +67,18 @@ class MoviesViewModel: MoviesViewModelProtocol{
     }
     
     func getMovieById(vc: UIViewController, movieId: String){
-        NetworkService.getApi(vc: vc, endPoint: EndPoints.movieByID(movieID: movieId)) { [weak self] (data: MoviesModel?, error) in
+        movieUseCaseProtocol.getMovieById(vc: vc, movieId: movieId) { [weak self] data, error in
             guard let responsData = data else{ return }
             self?.movieById = responsData.data?.results?.first
         }
     }
     
     func saveMovieDescInCoreData(movieChara: String, movieId: Int, movieType: String){
-        CoreDataManager.saveToCoreData(movieChara: movieChara, movieId: movieId, movieType: movieType)
+        movieUseCaseProtocol.saveMovieDesc(movieChara: movieChara, movieId: movieId, movieType: movieType)
     }
     
     func getMovieDescInCoreData(movieId: Int){
-        coreDataSavedMoviesDesc = CoreDataManager.fetchFromCoreData()
+        coreDataSavedMoviesDesc = movieUseCaseProtocol.getMovieDesc()
         savedMovieDesc = MovieDescModel()
         if coreDataSavedMoviesDesc?.isEmpty ?? true == false{
             for i in 0..<(coreDataSavedMoviesDesc?.count ?? 0){
